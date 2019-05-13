@@ -1,6 +1,6 @@
 # rxjs
 
-operator练习
+operator实操练习
 
 ## 目录
 
