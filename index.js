@@ -1,5 +1,5 @@
 import {Observable,pipe,of,from,fromEvent,fromEventPattern,empty,never,throwError,interval,timer, concat} from 'rxjs';
-import { map,take,takeLast,last,startWith,merge,combineLatest,zip,withLatestFrom,scan, buffer} from 'rxjs/operators';
+import { map,take,takeLast,last,startWith,merge,combineLatest,zip,withLatestFrom,scan, buffer, bufferTime,bufferCount,delay, delayWhen} from 'rxjs/operators';
 import producter from './Producter';
 const observer = {
   next: function(value) {
@@ -166,8 +166,50 @@ const observable20 = interval(300).pipe(
 const observable21 = interval(200).pipe(
   buffer(interval(500))
 )
-observable21.subscribe(observer);
 
+/**
+ * --0--1--2--4--5--6--7--8
+ * ---------0---------1---------2
+ */
+const observable22 = interval(300).pipe(
+  bufferTime(1000)
+)
+
+/**
+ * --0--1--2--4--5--6--7--8
+ * [0,1]
+ * [2,3]
+ * [4,5]
+ */
+const observable23 = interval(300).pipe(
+  bufferCount(2)
+)
+
+/**
+ * --0--1--2--3--4 转换前
+ * -----------0--1--2--3--4 转换后
+ */
+const observable24 = interval(300).pipe(
+  take(5),
+  delay(1000)
+)
+/**
+ * --0--1--2--3--4
+ * --0---1----2-----3------4
+ */
+const observable25 = interval(300).pipe(
+  take(5)
+)
+
+
+observable25.subscribe(observer);
+
+
+
+/**
+ * ---------0---------1---------2
+ * -------------------0---------1---------2
+ */
 
 
 

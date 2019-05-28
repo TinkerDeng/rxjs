@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>JS Bin</title>
-  <link rel="stylesheet" href="./index.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.0.1/Rx.js"></script>
-</head>
-<body>
-<script>
-  /**
-   * buffer 收集输出值，直到第二个observable触发时，将收集到的值以数组形式输出
-   */
-  const documentClick = Rx.Observable.fromEvent(document,'click');
-  const interval = Rx.Observable.interval(1000);
-  const observable = interval.buffer(documentClick);
-  observable.subscribe(console.log)
-</script>
-</body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>JS Bin</title>
+    <link rel="stylesheet" href="./index.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/5.0.1/Rx.js"></script>
+  </head>
+  <body>
+    <script>
+      /**
+       * buffer 收集输出值，直到第二个observable触发时，将收集到的值以数组形式输出
+       */
+      const documentClick = Rx.Observable.fromEvent(document, 'click');
+      const interval = Rx.Observable.interval(1000);
+      /**
+       * 300ms 内点击最少两下才能执行console.log
+       */
+      const observable = documentClick.bufferTime(300).filter(arr => {
+        return arr.length >= 2;
+      });
+      //const observable = interval.buffer(documentClick);
+      observable.subscribe(console.log);
+    </script>
+  </body>
 </html>
